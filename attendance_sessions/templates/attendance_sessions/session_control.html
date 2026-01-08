@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Session Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+        }
+        button {
+            padding: 12px 25px;
+            margin: 10px 10px 20px 0;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: #fff;
+        }
+        #start-btn {
+            background-color: #4CAF50;
+        }
+        #stop-btn {
+            background-color: #f44336;
+        }
+        #result {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            white-space: pre-wrap;
+            max-width: 600px;
+            border-radius: 5px;
+        }
+        .status {
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Session Control</h1>
+
+    <div class="status" id="status">Loading session status...</div>
+
+    <button id="start-btn">Start Session</button>
+    <button id="stop-btn">Stop Session</button>
+
+    <div id="result">Results will appear here</div>
+
+    <script>
+        async function getSessionStatus() {
+            // Check if a session is active by calling start-session endpoint
+            const response = await fetch("/session/start-session/");
+            const data = await response.json();
+
+            const statusDiv = document.getElementById("status");
+            const startBtn = document.getElementById("start-btn");
+            const stopBtn = document.getElementById("stop-btn");
+
+            if (data.error) {
+                statusDiv.innerText = `Active Session: ${data.session_id}`;
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+            } else {
+                statusDiv.innerText = "No active session";
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+            }
+        }
+
+        async function startSession() {
+            const response = await fetch("/session/start-session/");
+            const data = await response.json();
+            document.getElementById("result").innerText = JSON.stringify(data, null, 2);
+            getSessionStatus();
+        }
+
+        async function stopSession() {
+            const response = await fetch("/session/stop-session/", {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken"),
+                }
+            });
+            const data = await response.json();
+            document.getElementById("result").innerText = JSON.stringify(data, null, 2);
+            getSessionStatus();
+        }
+
+        document.getElementById("start-btn").onclick = startSession;
+        document.getElementById("stop-btn").onclick = stopSession;
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                const cookies = document.cookie.split(";");
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + "=")) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        // Initialize status on page load
+        getSessionStatus();
+    </script>
+</body>
+</html>
