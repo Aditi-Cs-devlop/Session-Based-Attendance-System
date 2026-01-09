@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+
+<body>
+
+<!-- TOP NAV -->
+<nav class="top-bar">
+    <h2>Attendance Pro</h2>
+    <span>Session Control Panel</span>
+</nav>
+
+<!-- SESSION BUTTONS -->
+<section class="action-panel">
+    <button id="startSession" class="glow-btn">Start Session</button>
+    <button id="stopSession" class="stop-btn" disabled>Stop Session</button>
+</section>
+
+<!-- CAMERA -->
+<section class="camera-box">
+    <h3>Live Camera</h3>
+    <div class="camera-placeholder" id="cameraStatus">
+        Camera Disabled
+    </div>
+
+    <!-- CAPTURE BUTTONS -->
+    <div class="capture-panel">
+        <button id="captureBtn" class="glow-btn" disabled>Capture Image</button>
+        <button id="recaptureBtn" class="stop-btn" disabled>Re-Capture</button>
+    </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+    <div class="stat-card purple">
+        Total Faces
+        <span id="totalFaces">0</span>
+    </div>
+
+    <div class="stat-card green">
+        Recognized
+        <span id="recognized">0</span>
+    </div>
+
+    <div class="stat-card red">
+        Unrecognized
+        <span id="unrecognized">0</span>
+    </div>
+</section>
+
+<button class="submit-btn">Final Submit</button>
+
+<!-- JS (IMPORTANT PATH) -->
+<script src="../static/js/session.js"></script>
+
+</body>
+</html>
